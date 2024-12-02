@@ -37,57 +37,63 @@ class RegisterPage extends StatelessWidget {
           }
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: 'Email'),
-                ),
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                ),
-                TextField(
-                  controller: passwordRepeatController,
-                  decoration: InputDecoration(labelText: 'Repeat password'),
-                  obscureText: true,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    final email = emailController.text.trim();
-                    final password = passwordController.text.trim();
-                    final repeatPassword = passwordRepeatController.text.trim();
+            child: Center(  // Используем Center для выравнивания ConstrainedBox по центру
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 600),  // Максимальная ширина для всех полей
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(labelText: 'Email'),
+                    ),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(labelText: 'Password'),
+                      obscureText: true,
+                    ),
+                    TextField(
+                      controller: passwordRepeatController,
+                      decoration: InputDecoration(labelText: 'Repeat password'),
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        final email = emailController.text.trim();
+                        final password = passwordController.text.trim();
+                        final repeatPassword = passwordRepeatController.text.trim();
 
-                    // Проверка полей
-                    final error = _validateFields(email, password, repeatPassword);
-                    if (error != null) {
-                      if (context.mounted) {
-                        _showSnackbar(context, error);
-                      }
-                      return;
-                    }
+                        // Проверка полей
+                        final error = _validateFields(email, password, repeatPassword);
+                        if (error != null) {
+                          if (context.mounted) {
+                            _showSnackbar(context, error);
+                          }
+                          return;
+                        }
 
-                    // Вызываем метод регистрации из AuthCubit
-                    context.read<AuthCubit>().register(email, password);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Цвет кнопки
-                    foregroundColor: Colors.white, // Цвет текста
-                  ),
-                  child: Text('Register'),
+                        // Вызываем метод регистрации из AuthCubit
+                        context.read<AuthCubit>().register(email, password);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue, // Цвет кнопки
+                        foregroundColor: Colors.white, // Цвет текста
+                      ),
+                      child: Text('Register'),
+                    ),
+                    SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () => {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        )
+                      },
+                      child: Text('Already have an account? Login'),
+                    ),
+                  ],
                 ),
-                TextButton(
-                  onPressed: () => {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    )
-                  },
-                  child: Text('Already have an account? Login'),
-                ),
-              ],
+              ),
             ),
           );
         },

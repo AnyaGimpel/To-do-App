@@ -35,59 +35,65 @@ class HomePage extends StatelessWidget {
           },
         ),
       ),
-      
-      body: Column(
-        children: [
-          const FilterSortSection(),
-          Expanded(
-            child: BlocBuilder<TaskCubit, TaskState>(
-              builder: (context, state) {
-                if (state is TaskDualLoaded) {
-                  final completedTasks = state.completedTasks;
-                  final incompleteTasks = state.incompleteTasks;
-                  final filter = state.currentFilter;
-                  final sort = state.currentSort;
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(  // Центрирование содержимого
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 800), // Ограничение максимальной ширины
+            child: Column(
+              children: [
+                const FilterSortSection(),
+                Expanded(
+                  child: BlocBuilder<TaskCubit, TaskState>(
+                    builder: (context, state) {
+                      if (state is TaskDualLoaded) {
+                        final completedTasks = state.completedTasks;
+                        final incompleteTasks = state.incompleteTasks;
+                        final filter = state.currentFilter;
+                        final sort = state.currentSort;
 
-                  if (sort == 'Due date') {
-                    completedTasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
-                    incompleteTasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
-                  } else if (sort == 'Title') {
-                    completedTasks.sort((a, b) => a.title.compareTo(b.title));
-                    incompleteTasks.sort((a, b) => a.title.compareTo(b.title));
-                  }
+                        if (sort == 'Due date') {
+                          completedTasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+                          incompleteTasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+                        } else if (sort == 'Title') {
+                          completedTasks.sort((a, b) => a.title.compareTo(b.title));
+                          incompleteTasks.sort((a, b) => a.title.compareTo(b.title));
+                        }
 
-                  if (filter == 'All') {
-                    return ListView(
-                      children: [
-                        _buildTaskSection('To-do', incompleteTasks),
-                        const SizedBox(height: 16),
-                        _buildTaskSection('Done', completedTasks),
-                      ],
-                    );
-                  } else if (filter == 'To-do') {
-                    return ListView(
-                      children: [
-                        _buildTaskSection('To-do', incompleteTasks),
-                      ],
-                    );
-                  } else if (filter == 'Done') {
-                    return ListView(
-                      children: [
-                        _buildTaskSection('Done', completedTasks),
-                      ],
-                    );
-                  }
-                } else if (state is TaskError) {
-                  return Center(child: Text(state.message));
-                }
+                        if (filter == 'All') {
+                          return ListView(
+                            children: [
+                              _buildTaskSection('To-do', incompleteTasks),
+                              const SizedBox(height: 16),
+                              _buildTaskSection('Done', completedTasks),
+                            ],
+                          );
+                        } else if (filter == 'To-do') {
+                          return ListView(
+                            children: [
+                              _buildTaskSection('To-do', incompleteTasks),
+                            ],
+                          );
+                        } else if (filter == 'Done') {
+                          return ListView(
+                            children: [
+                              _buildTaskSection('Done', completedTasks),
+                            ],
+                          );
+                        }
+                      } else if (state is TaskError) {
+                        return Center(child: Text(state.message));
+                      }
 
-                return const Center(child: Text('Please wait...'));
-              },
+                      return const Center(child: Text('Please wait...'));
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
-      
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushReplacement(

@@ -36,78 +36,81 @@ class InputFormWidget extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-              maxLines: 3,
-              textInputAction: TextInputAction.newline,
-            ),
-            const SizedBox(height: 16),
-            Row(
+        child: Center(  // Центрируем форму
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 600),  // Ограничиваем максимальную ширину
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Text(
-                    selectedDateTime != null
-                        ? 'Selected: ${_formatDateTime(selectedDateTime!)}'
-                        : 'Pick Date & Time',
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                TextField(
+                  controller: titleController,
+                  decoration: const InputDecoration(labelText: 'Title'),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.calendar_today),
-                  onPressed: () async {
-                    
-                    final selectedDate = await showDatePicker(
-                      context: context,
-                      initialDate: selectedDateTime ?? DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
-                    );
-
-                    if (selectedDate != null) {
-                      final selectedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.fromDateTime(
-                          selectedDateTime ?? DateTime.now(),
-                        ),
-                      );
-
-                      if (selectedTime != null) {
-                        final dateTime = DateTime(
-                          selectedDate.year,
-                          selectedDate.month,
-                          selectedDate.day,
-                          selectedTime.hour,
-                          selectedTime.minute,
+                const SizedBox(height: 16),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: 'Description'),
+                  maxLines: 3,
+                  textInputAction: TextInputAction.newline,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        selectedDateTime != null
+                            ? 'Selected: ${_formatDateTime(selectedDateTime!)}'
+                            : 'Pick Date & Time',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.calendar_today),
+                      onPressed: () async {
+                        final selectedDate = await showDatePicker(
+                          context: context,
+                          initialDate: selectedDateTime ?? DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
                         );
-                        onDateTimePicked(dateTime);
-                      }
-                    }
-                  },
+
+                        if (selectedDate != null) {
+                          final selectedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(
+                              selectedDateTime ?? DateTime.now(),
+                            ),
+                          );
+
+                          if (selectedTime != null) {
+                            final dateTime = DateTime(
+                              selectedDate.year,
+                              selectedDate.month,
+                              selectedDate.day,
+                              selectedTime.hour,
+                              selectedTime.minute,
+                            );
+                            onDateTimePicked(dateTime);
+                          }
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: onSave,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue, // Цвет кнопки
+                      foregroundColor: Colors.white, // Цвет текста
+                    ),
+                    child: const Text('Save'),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-              onPressed: onSave,
-              style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Цвет кнопки
-                    foregroundColor: Colors.white, // Цвет текста
-                  ),
-              child: const Text('Save'),
-            ),
-            )
-            
-          ],
+          ),
         ),
       ),
     );

@@ -30,7 +30,6 @@ class ViewTask extends StatelessWidget{
 
       context.read<TaskCubit>().updateTask(updatedTask);
 
-      // После сохранения обновляем данные и возвращаемся на главную страницу
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),

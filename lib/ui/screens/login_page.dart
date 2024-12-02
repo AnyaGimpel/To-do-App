@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
-        ),
+      ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
@@ -35,45 +35,52 @@ class LoginPage extends StatelessWidget {
           }
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: 'Email'),
-                ),
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: 'Password'),
-                  obscureText: true,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    final email = emailController.text.trim();
-                    final password = passwordController.text.trim();
+            child: Center(  // Центрируем весь блок
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 600),  // Максимальная ширина для полей
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(labelText: 'Email'),
+                    ),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(labelText: 'Password'),
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        final email = emailController.text.trim();
+                        final password = passwordController.text.trim();
 
-                    if (email.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context) .showSnackBar(SnackBar(content: Text('All fields must be completed')));
-                    } else {
-                      context.read<AuthCubit>().login(email, password);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Цвет кнопки
-                    foregroundColor: Colors.white, // Цвет текста
-                  ),
-                  child: Text('Login'),
+                        if (email.isEmpty || password.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text('All fields must be completed')));
+                        } else {
+                          context.read<AuthCubit>().login(email, password);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue, // Цвет кнопки
+                        foregroundColor: Colors.white, // Цвет текста
+                      ),
+                      child: Text('Login'),
+                    ),
+                    SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () => {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegisterPage()),
+                        )
+                      },
+                      child: Text('Don’t have an account? Register'),
+                    ),
+                  ],
                 ),
-                TextButton(
-                  onPressed: () => {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    )
-                  },
-                  child: Text('Don’t have an account? Register'),
-                ),
-              ],
+              ),
             ),
           );
         },
