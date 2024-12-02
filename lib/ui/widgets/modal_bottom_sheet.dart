@@ -43,6 +43,7 @@ class ModalBottomSheet extends StatelessWidget {
                   setState(() {
                     selectedIndex = value!;
                   });
+                  onOptionSelected(selectedIndex);
                 },
               );
             }),

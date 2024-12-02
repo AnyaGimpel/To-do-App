@@ -45,15 +45,40 @@ class HomePage extends StatelessWidget {
                 if (state is TaskDualLoaded) {
                   final completedTasks = state.completedTasks;
                   final incompleteTasks = state.incompleteTasks;
-                  return ListView(
-                    children: [
-                      _buildTaskSection('To-do', incompleteTasks),
-                      const SizedBox(height: 16),
-                      _buildTaskSection('Done', completedTasks),
-                    ],
-                  );
+                  final filter = state.currentFilter;
+                  final sort = state.currentSort;
+
+                  if (sort == 'Due date') {
+                    completedTasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+                    incompleteTasks.sort((a, b) => a.dateTime.compareTo(b.dateTime));
+                  } else if (sort == 'Title') {
+                    completedTasks.sort((a, b) => a.title.compareTo(b.title));
+                    incompleteTasks.sort((a, b) => a.title.compareTo(b.title));
+                  }
+
+                  if (filter == 'All') {
+                    return ListView(
+                      children: [
+                        _buildTaskSection('To-do', incompleteTasks),
+                        const SizedBox(height: 16),
+                        _buildTaskSection('Done', completedTasks),
+                      ],
+                    );
+                  } else if (filter == 'To-do') {
+                    return ListView(
+                      children: [
+                        _buildTaskSection('To-do', incompleteTasks),
+                      ],
+                    );
+                  } else if (filter == 'Done') {
+                    return ListView(
+                      children: [
+                        _buildTaskSection('Done', completedTasks),
+                      ],
+                    );
+                  }
                 } else if (state is TaskError) {
-                  return Container();
+                  return Center(child: Text(state.message));
                 }
 
                 return const Center(child: Text('Please wait...'));

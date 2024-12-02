@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'modal_bottom_sheet.dart'; // Импортируем виджет всплывающего окна
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_app/cubit/task_cubit.dart';
+import 'modal_bottom_sheet.dart'; 
 
 class FilterSortSection extends StatelessWidget {
   const FilterSortSection({super.key});
@@ -15,16 +17,18 @@ class FilterSortSection extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  // Показываем всплывающее окно с фильтрацией
+                  final currentFilter = context.read<TaskCubit>().currentFilter; 
+                  final initialIndex = _mapFilterToIndex(currentFilter);
+
                   showModalBottomSheet(
                     context: context,
                     builder: (_) => ModalBottomSheet(
                       title: 'Show tasks',
-                      options: ['All', 'To-do', 'Done'], // Опции
-                      initialSelectedIndex: 0, // Начальный выбор
+                      options: ['All', 'To-do', 'Done'],
+                      initialSelectedIndex: initialIndex, 
                       onOptionSelected: (selectedIndex) {
-                        // Логика обработки выбранной опции
-                        //print('Выбрана опция: $selectedIndex');
+                        final filter = _mapIndexToFilter(selectedIndex);
+                        context.read<TaskCubit>().updateTaskFilter(filter);  
                       },
                     ),
                   );
@@ -39,16 +43,19 @@ class FilterSortSection extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  final currentSort = context.read<TaskCubit>().currentSort;
+                  final initialSortIndex = _mapSortToIndex(currentSort);
+
                   showModalBottomSheet(
-                    context: context, 
+                    context: context,
                     builder: (_) => ModalBottomSheet(
-                      title: 'Sort by', 
-                      options: ['Default', 'Due date', 'Title'], 
-                      initialSelectedIndex: 0,
-                      onOptionSelected: (selectedIndex) {
-                        // Логика обработки выбранной опции
-                        //print('Выбрана опция: $selectedIndex');
-                      },
+                        title: 'Sort by',
+                        options: ['Default', 'Due date', 'Title'],
+                        initialSelectedIndex: initialSortIndex,
+                        onOptionSelected: (selectedIndex) {
+                          final sort = _mapIndexToSort(selectedIndex);
+                          context.read<TaskCubit>().updateTaskSort(sort);
+                        },
                     )
                   );
                 },
@@ -63,13 +70,64 @@ class FilterSortSection extends StatelessWidget {
             ],
           ),
 
-          // Разделительная полоса
           const Divider(
-            color: Colors.grey, // Цвет разделителя
-            thickness: 1, // Толщина линии
+            color: Colors.grey, 
+            thickness: 1, 
           ),
         ],
       ),
     );
   }
+
+  String _mapIndexToFilter(int selectedIndex) {
+    switch (selectedIndex) {
+      case 0:
+        return 'All';
+      case 1:
+        return 'To-do';
+      case 2:
+        return 'Done';
+      default:
+        return 'All';
+    }
+  }
+
+  int _mapFilterToIndex(String filter) {
+  switch (filter) {
+    case 'All':
+      return 0;
+    case 'To-do':
+      return 1;
+    case 'Done':
+      return 2;
+    default:
+      return 0;
+  }
+}
+
+int _mapSortToIndex(String sort) {
+    switch (sort) {
+      case 'Default':
+        return 0;
+      case 'Due date':
+        return 1;
+      case 'Title':
+        return 2;
+      default:
+        return 0;
+    }
+  }
+String _mapIndexToSort(int selectedIndex) {
+    switch (selectedIndex) {
+      case 0:
+        return 'Default';
+      case 1:
+        return 'Due date';
+      case 2:
+        return 'Title';
+      default:
+        return 'Default';
+    }
+  }
+
 }

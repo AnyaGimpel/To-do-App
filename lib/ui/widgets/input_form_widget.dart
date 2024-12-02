@@ -64,7 +64,7 @@ class InputFormWidget extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.calendar_today),
                   onPressed: () async {
-                    // Показываем выбор даты
+                    
                     final selectedDate = await showDatePicker(
                       context: context,
                       initialDate: selectedDateTime ?? DateTime.now(),
