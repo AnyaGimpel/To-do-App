@@ -9,7 +9,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'To-do App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+              //fontWeight: FontWeight.bold, 
+              color: Colors.black, 
+              fontSize: 24
+          ),
+          backgroundColor: Colors.white
+        ),
       ), 
       home: LoginPage(),
     );

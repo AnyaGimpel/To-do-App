@@ -14,7 +14,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Register')),
+      appBar: AppBar(title: Text('Registration')),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
@@ -72,6 +72,10 @@ class RegisterPage extends StatelessWidget {
                     // Вызываем метод регистрации из AuthCubit
                     context.read<AuthCubit>().register(email, password);
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue, // Цвет кнопки
+                    foregroundColor: Colors.white, // Цвет текста
+                  ),
                   child: Text('Register'),
                 ),
                 TextButton(

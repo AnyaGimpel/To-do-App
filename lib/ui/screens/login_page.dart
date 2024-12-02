@@ -13,7 +13,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(
+        title: Text('Login'),
+        ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
@@ -55,8 +57,11 @@ class LoginPage extends StatelessWidget {
                     } else {
                       context.read<AuthCubit>().login(email, password);
                     }
-
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue, // Цвет кнопки
+                    foregroundColor: Colors.white, // Цвет текста
+                  ),
                   child: Text('Login'),
                 ),
                 TextButton(
