@@ -44,6 +44,18 @@ class TaskService{
     });
   }
 
+  Future<void> updateTask(Task task) async {
+  try {
+    await _firestore.collection('tasks').doc(task.id).update({
+      'title': task.title,
+      'description': task.description,
+      'dateTime': task.dateTime,
+    });
+  } catch (e) {
+    throw Exception('Error updating task: $e');
+  }
+}
+
   Future <void> deleteTask(String taskId) async {
     try{
       await _firestore.collection('tasks').doc(taskId).delete();

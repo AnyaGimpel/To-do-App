@@ -50,6 +50,35 @@ class TaskCubit extends Cubit<TaskState> {
     }
   }
 
+  Future<void> updateTask(Task updatedTask) async {
+    try {
+      await _taskService.updateTask(updatedTask);  // Вызов сервиса для обновления задачи
+
+      final currentState = state;
+      if (currentState is TaskDualLoaded) {
+        // Обновление задачи в списках
+        final updatedCompletedTasks = List<Task>.from(currentState.completedTasks);
+        final updatedIncompleteTasks = List<Task>.from(currentState.incompleteTasks);
+
+        Task task;
+        if (updatedTask.isCompleted) {
+          task = updatedIncompleteTasks.firstWhere((task) => task.id == updatedTask.id);
+          updatedIncompleteTasks.remove(task);
+          updatedCompletedTasks.add(updatedTask);
+        } else {
+          task = updatedCompletedTasks.firstWhere((task) => task.id == updatedTask.id);
+          updatedCompletedTasks.remove(task);
+          updatedIncompleteTasks.add(updatedTask);
+        }
+
+        emit(TaskDualLoaded(updatedCompletedTasks, updatedIncompleteTasks, _currentFilter, _currentSort));
+      }
+    } catch (e) {
+      emit(TaskError('Error updating task: $e'));
+    }
+  }
+
+
   Future<void> deleteTask(String taskId) async {
     try {
       await _taskService.deleteTask(taskId);

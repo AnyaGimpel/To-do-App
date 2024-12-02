@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/cubit/task_cubit.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_app/ui/screens/view_task.dart';
 
 class TaskCard extends StatelessWidget{
   final Task task;
@@ -32,6 +33,15 @@ class TaskCard extends StatelessWidget{
             context.read<TaskCubit>().deleteTask(task.id);
           },
         ),
+        onTap: () {
+          // При нажатии открываем экран редактирования задачи
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ViewTask(task: task), // Переход на экран редактирования
+            ),
+          );
+        },
       ),
     );
   }
