@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/cubit/task_cubit.dart';
 import 'modal_bottom_sheet.dart'; 
 
+/// A widget that provides options to filter and sort the tasks.
+/// It allows users to filter tasks by status (All, To-do, Done) and sort tasks 
+/// by different criteria (Default, Due date, Title).
 class FilterSortSection extends StatelessWidget {
   const FilterSortSection({super.key});
 
@@ -15,6 +18,7 @@ class FilterSortSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // Filter button
               GestureDetector(
                 onTap: () {
                   final currentFilter = context.read<TaskCubit>().currentFilter; 
@@ -41,6 +45,7 @@ class FilterSortSection extends StatelessWidget {
                   ],
                 ),
               ),
+              // Sort button
               GestureDetector(
                 onTap: () {
                   final currentSort = context.read<TaskCubit>().currentSort;
@@ -70,6 +75,7 @@ class FilterSortSection extends StatelessWidget {
             ],
           ),
 
+          // Divider between filter/sort section and the content
           const Divider(
             color: Colors.grey, 
             thickness: 1, 
@@ -79,6 +85,7 @@ class FilterSortSection extends StatelessWidget {
     );
   }
 
+  /// Maps the selected index from the bottom sheet to a filter value.
   String _mapIndexToFilter(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
@@ -92,20 +99,22 @@ class FilterSortSection extends StatelessWidget {
     }
   }
 
+  /// Maps the current filter value to an index for the bottom sheet.
   int _mapFilterToIndex(String filter) {
-  switch (filter) {
-    case 'All':
-      return 0;
-    case 'To-do':
-      return 1;
-    case 'Done':
-      return 2;
-    default:
-      return 0;
+    switch (filter) {
+      case 'All':
+        return 0;
+      case 'To-do':
+        return 1;
+      case 'Done':
+        return 2;
+      default:
+        return 0;
+    }
   }
-}
 
-int _mapSortToIndex(String sort) {
+  /// Maps the selected index from the bottom sheet to a sort value.
+  int _mapSortToIndex(String sort) {
     switch (sort) {
       case 'Default':
         return 0;
@@ -117,7 +126,9 @@ int _mapSortToIndex(String sort) {
         return 0;
     }
   }
-String _mapIndexToSort(int selectedIndex) {
+
+  /// Maps the selected index from the bottom sheet to a sort value.
+  String _mapIndexToSort(int selectedIndex) {
     switch (selectedIndex) {
       case 0:
         return 'Default';
@@ -129,5 +140,4 @@ String _mapIndexToSort(int selectedIndex) {
         return 'Default';
     }
   }
-
 }

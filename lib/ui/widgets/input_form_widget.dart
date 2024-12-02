@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/ui/screens/home_page.dart';
 
+/// A widget for displaying a form to input task details like title, description, and date/time.
 class InputFormWidget extends StatelessWidget {
   final TextEditingController titleController;
   final TextEditingController descriptionController;
@@ -9,6 +10,9 @@ class InputFormWidget extends StatelessWidget {
   final VoidCallback onSave;
   final String appBarTitle;
 
+  /// Constructor for [InputFormWidget] that takes controllers for title and description,
+  /// the selected date/time, callbacks for date/time selection and saving, and an optional 
+  /// app bar title.
   const InputFormWidget({
     super.key,
     required this.titleController,
@@ -36,9 +40,9 @@ class InputFormWidget extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center(  // Центрируем форму
+        child: Center(  
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 600),  // Ограничиваем максимальную ширину
+            constraints: BoxConstraints(maxWidth: 600), 
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -67,6 +71,7 @@ class InputFormWidget extends StatelessWidget {
                     IconButton(
                       icon: const Icon(Icons.calendar_today),
                       onPressed: () async {
+                        // Show date picker
                         final selectedDate = await showDatePicker(
                           context: context,
                           initialDate: selectedDateTime ?? DateTime.now(),
@@ -75,6 +80,7 @@ class InputFormWidget extends StatelessWidget {
                         );
 
                         if (selectedDate != null) {
+                          // Show time picker after selecting date
                           final selectedTime = await showTimePicker(
                             context: context,
                             initialTime: TimeOfDay.fromDateTime(
@@ -83,6 +89,7 @@ class InputFormWidget extends StatelessWidget {
                           );
 
                           if (selectedTime != null) {
+                            // Combine date and time to form the complete dateTime
                             final dateTime = DateTime(
                               selectedDate.year,
                               selectedDate.month,
@@ -102,8 +109,8 @@ class InputFormWidget extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: onSave,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // Цвет кнопки
-                      foregroundColor: Colors.white, // Цвет текста
+                      backgroundColor: Colors.blue, 
+                      foregroundColor: Colors.white, 
                     ),
                     child: const Text('Save'),
                   ),
@@ -116,6 +123,9 @@ class InputFormWidget extends StatelessWidget {
     );
   }
 
+  /// Formats the date and time into a readable string.
+  /// 
+  /// [dateTime] is the [DateTime] object to format.
   String _formatDateTime(DateTime dateTime) {
     return '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
